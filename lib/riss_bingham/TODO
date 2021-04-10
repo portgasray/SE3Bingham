@@ -1,0 +1,71 @@
+
+
+---
+OLF
+---
+
+NOW:
+
+DONE:
+ + olf_pose_sample()
+ + olf_pose_pdf()
+ + load_olf()
+ + load_pcd()
+ + Make OLF (Oriented Local Feature) library
+
+
+
+-------------------------------
+HYPERSPHERICAL LOCAL LIKELIHOOD
+-------------------------------
+
+NOW:
+
+DONE:
+ + Add caching to HLL model
+ + Make HLL library
+ + hll_new()
+ + hll_sample()
+ 
+
+
+-------
+BINGHAM
+-------
+
+NOW:
+ - Improve dY -> Z lookup via IDW interpolation
+ - Check for 0 mixtures in bingham_cluster
+
+
+SOON:
+ - Triangular meshing of S2
+ - Speed optimizations
+ - Test for memory leaks (continuous operation)
+
+
+DONE:
+ + Recompute normalization constants
+ + Remove GSL dependencies (solve, det, inv, eigen_symm)
+ + Move bingham_stats_t inside bingham_t and lazy auto compute stats
+ + Use bingham_F_lookup_3d() in bingham_new()
+ + bingham_mixture_sample()
+ + bingham_sample_uniform()
+ + pmfrand()
+ + Use ACG as proposal distribution in bingham_sample()
+ + Angular Central Gaussian sampling and pdf
+ + Improve bingham_sample() with rejection sampling
+ + bingham_sample()
+ + Multivariate normal sampling and pdf
+ + Add function "F = bingham_F_lookup_3d(Z)" to bingham_constants.c
+ + Improve speed of bingham_discretize()
+ + Test speed of bingham_discretize()
+ + Test speed of bingham_sample()
+ + Cache hypersphere tessellations
+ + Fix sample_simplex()
+ + Test bingham_sample()
+ + Test bingham_pdf()
+ + Test bingham_discretize()
+ + Use safe_alloc()
+ + Fast normalization constant lookup
+ + Use graph traversal to avoid saving redundant faces to PLY files.
