@@ -2,8 +2,9 @@
 
 %% Overall Settings
 clear all;
-addpath(genpath('E:\Repository\Experiments\Kurz.KIT.DirectStat\libDirectional'));
-addpath('E:\Repository\Experiments\Lei.Zhang\utils\export_fig');
+% addpath(genpath('E:\Repository\Experiments\Kurz.KIT.DirectStat\libDirectional'));
+addpath(genpath('E:\Repository\Experiments\Lei.Zhang\SE3Bingham\lib'));
+addpath('E:\Repository\Experiments\Lei.Zhang\SE3Bingham\utils\export_fig');
 
 fontSize = 14;
 markerSize = 10;
@@ -53,7 +54,7 @@ C = [C1 C2'; C2 C3];
 % b = BinghamDistribution([-30 -10 -3 0]', eye(4,4));
 % s = b.sample(N);
 
-N = 10;
+N = 100;
 p = SE3BinghamDistribution(C);
 s = p.sample(N);
 % mode 8-length vector
@@ -78,12 +79,12 @@ v3 = s(4,:)./sin(theta/2);
 v = [v1; v2; v3]';
 
 %% calculate the antipodal symmetry orientation -s(1:4,)
-% sym_theta = 2 * atan2(sqrt(s(2,:).^2 + s(3,:).^2 + s(4,:).^2), -s(1,:));
-% 
-% sym_v1 = -s(2,:)./sin(sym_theta/2);
-% sym_v2 = -s(3,:)./sin(sym_theta/2);
-% sym_v3 = -s(4,:)./sin(sym_theta/2);
-% sym_v = [sym_v1; sym_v2; sym_v3]';
+sym_theta = 2 * atan2(sqrt(s(2,:).^2 + s(3,:).^2 + s(4,:).^2), -s(1,:));
+
+sym_v1 = -s(2,:)./sin(sym_theta/2);
+sym_v2 = -s(3,:)./sin(sym_theta/2);
+sym_v3 = -s(4,:)./sin(sym_theta/2);
+sym_v = [sym_v1; sym_v2; sym_v3]';
 
 % nice properties: rad2deg(theta + sym_theta) = 360.0008, sym_v = -v  for each sample
 %% calculate the translation from samples s(1:8,:)
@@ -99,12 +100,12 @@ t3 = 2*(s(1,:).*s(8,:) - s(2,:).* s(7,:) + s(3,:).*s(6,:) - s(4,:).*s(5,:));
 t = [t1; t2; t3];
 
 % using the sample -s(1:4, :)
-% sym_t1 = 2*((-s(1,:)).*s(6,:) - (-s(2,:)).* s(5,:) + (-s(3,:)).*s(8,:) - (-s(4,:)).*s(7,:));
-% sym_t2 = 2*((-s(1,:)).*s(7,:) - (-s(2,:)).* s(8,:) + (-s(3,:)).*s(5,:) - (-s(4,:)).*s(6,:));
-% sym_t3 = 2*((-s(1,:)).*s(8,:) - (-s(2,:)).* s(7,:) + (-s(3,:)).*s(6,:) - (-s(4,:)).*s(5,:));
-% sym_t = [sym_t1; sym_t2; sym_t3];
+sym_t1 = 2*((-s(1,:)).*s(6,:) - (-s(2,:)).* s(5,:) + (-s(3,:)).*s(8,:) - (-s(4,:)).*s(7,:));
+sym_t2 = 2*((-s(1,:)).*s(7,:) - (-s(2,:)).* s(8,:) + (-s(3,:)).*s(5,:) - (-s(4,:)).*s(6,:));
+sym_t3 = 2*((-s(1,:)).*s(8,:) - (-s(2,:)).* s(7,:) + (-s(3,:)).*s(6,:) - (-s(4,:)).*s(5,:));
+sym_t = [sym_t1; sym_t2; sym_t3];
 
-% solution 2: nagete -s(1:8,:)
+%% solution 2: nagete -s(1:8,:)
 % sym_t1 = 2*((s(1,:)).*s(6,:) - (s(2,:)).* s(5,:) + (s(3,:).*s(8,:) - s(4,:).*s(7,:));
 % sym_t2 = 2*((s(1,:)).*s(7,:) - (s(2,:)).* s(8,:) + (s(3,:)).*s(5,:) - s(4,:).*s(6,:));
 % sym_t3 = 2*((s(1,:)).*s(8,:) - (s(2,:)).* s(7,:) + (s(3,:)).*s(6,:) - s(4,:).*s(5,:));
@@ -133,13 +134,13 @@ clf
 hold on
 % samples generated from s(1:8, :)
 % plot the rotational arbitrary vector
-% quiver3(t1, t2, t3, v1, v2, v3, 'b', 'AutoScaleFactor', 0.3);
+quiver3(t1, t2, t3, v1, v2, v3, 'b', 'AutoScaleFactor', 0.3);
 % plot the postion by dots
-scatter3(t1, t2, t3, markerSize, 'ob');
+scatter3(t1, t2, t3, markerSize, 'ob', 'fill');
 
 
-% quiver3(sym_t1, sym_t2, sym_t3, sym_v1, sym_v2, sym_v3, 'r', 'AutoScaleFactor', 0.3);
-% scatter3(sym_t1, sym_t2, sym_t3, markerSize, 'or', 'fill');
+quiver3(sym_t1, sym_t2, sym_t3, sym_v1, sym_v2, sym_v3, 'r', 'AutoScaleFactor', 0.3);
+scatter3(sym_t1, sym_t2, sym_t3, markerSize, 'or', 'fill');
 
 %% plot modes
 
@@ -158,31 +159,30 @@ m_t3 = 2*(m(1)*m(8) - m(2)* m(7) + m(3)*m(6) - m(4)*m(5));
 m_t = [m_t1; m_t2; m_t3];
 
 % compute the antipodal one: -m( -m(1), )
-% a_m = -m;
-% 
+a_m = -m;
 % 
 % % rotation - antipodal mode
-% a_m_theta = 2 * atan2(sqrt(a_m(2)^2 + a_m(3)^2 + a_m(4)^2), a_m(1));
-% a_m_vec = [a_m(2)/sin(a_m_theta/2), a_m(3)/sin(a_m_theta/2), a_m(4)/sin(a_m_theta/2)];
-% 
-% % translation - antipodal mode
-% a_m_t1 = 2*(a_m(1)*a_m(6) - a_m(2)* a_m(5) + a_m(3)*a_m(8) - a_m(4)*a_m(7));
-% a_m_t2 = 2*(a_m(1)*a_m(7) - a_m(2)* a_m(8) + a_m(3)*a_m(5) - a_m(4)*a_m(6));
-% a_m_t3 = 2*(a_m(1)*a_m(8) - a_m(2)* a_m(7) + a_m(3)*a_m(6) - a_m(4)*a_m(5));
-% 
-% a_m_t = [a_m_t1; a_m_t2; a_m_t3];
+a_m_theta = 2 * atan2(sqrt(a_m(2)^2 + a_m(3)^2 + a_m(4)^2), a_m(1));
+a_m_vec = [a_m(2)/sin(a_m_theta/2), a_m(3)/sin(a_m_theta/2), a_m(4)/sin(a_m_theta/2)];
 
-% hold on
-% if rotateFirst
-%     R_mode = angvec2r(mode_theta, mode_v);
-%     m_tNew = R_mode*m_t;
-%     quiver3(m_tNew(1),m_tNew(2),m_tNew(3), mode_v(1), mode_v(2), mode_v(3), 'c', 'LineWidth', lineWidth);
-% else
-%     quiver3(m_t(1), m_t(2), m_t(3), mode_v(1), mode_v(2), mode_v(3), 'b', 'LineWidth', lineWidth);
-%     hold on
-%     quiver3(anti_m_t(1), anti_m_t(2), anti_m_t(3), anti_m_vec(1), anti_m_vec(2), anti_m_vec(3), 'r', 'LineWidth', lineWidth);
-% end
-% hold off
+% translation - antipodal mode
+a_m_t1 = 2*(a_m(1)*a_m(6) - a_m(2)* a_m(5) + a_m(3)*a_m(8) - a_m(4)*a_m(7));
+a_m_t2 = 2*(a_m(1)*a_m(7) - a_m(2)* a_m(8) + a_m(3)*a_m(5) - a_m(4)*a_m(6));
+a_m_t3 = 2*(a_m(1)*a_m(8) - a_m(2)* a_m(7) + a_m(3)*a_m(6) - a_m(4)*a_m(5));
+
+a_m_t = [a_m_t1; a_m_t2; a_m_t3];
+
+hold on
+if rotateFirst
+    R_mode = angvec2r(m_theta, m_vec);
+    m_tNew = R_mode*m_t;
+    quiver3(m_tNew(1),m_tNew(2),m_tNew(3), m_vec(1), m_vec(2), m_vec(3), 'c', 'LineWidth', lineWidth);
+else
+    quiver3(m_t(1), m_t(2), m_t(3), m_vec(1), m_vec(2), m_vec(3), 'b', 'LineWidth', lineWidth);
+    hold on
+    quiver3(a_m_t(1), a_m_t(2), a_m_t(3), a_m_vec(1), a_m_vec(2), a_m_vec(3), 'r', 'LineWidth', lineWidth);
+end
+hold off
 
 %% configuration for plot
 set(gca, 'FontSize', fontSize);
@@ -204,7 +204,7 @@ end
 %% export figure
 % export_fig(gcf, filename, '-transparent');
 
-%% plot 3D slice of density (de)
+%% plot 3D slice of density (future)
 % figure(2)
 % step = 0.2;
 % plotSize = 3;
