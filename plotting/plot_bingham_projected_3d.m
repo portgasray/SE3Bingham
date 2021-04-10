@@ -1,12 +1,9 @@
 clear all;
-addpath(genpath('E:\Workspace\MATLAB\bingham'));
+addpath(genpath('../lib'));
 
-addpath('E:\Repository\Experiments\Lei.Zhang\data');
-addpath(genpath('E:\Workspace\MATLAB\riss_bingham\'));
+addpath('../datasets');
 
-addpath('E:\Repository\Experiments\Lei.Zhang\utils\export_fig');
-% addpath('E:\Repository\Experiments\Lei.Zhang\utils\tight_subplot');
-addpath('E:\Repository\Experiments\Lei.Zhang\utils\panel-2.14');
+addpath('../utils/export_fig')
 
 
 

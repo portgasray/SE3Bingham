@@ -2,14 +2,14 @@
 
 %% Overall Settings
 clear all;
-addpath(genpath('E:\Repository\Experiments\Kurz.KIT.DirectStat\libDirectional'));
-addpath('E:\Repository\Experiments\Lei.Zhang\utils\export_fig');
+addpath(genpath('../lib'));
+addpath('../utils/export_fig');
 
 fontSize = 14;
 markerSize = 10;
 lineWidth = 5;
 
-rotateFirst = true; %true %false
+rotateFirst = false; %true %false
 %% Parameters for the Bingham-Gaussian Distribution
 % group 1
 C1 = -diag([2 2 2 2]);
