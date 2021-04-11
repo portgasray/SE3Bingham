@@ -1,5 +1,5 @@
 %% Example for using the SE2 Bingham Distributioon
-addpath(genpath('E:\Repository\Experiments\Kurz.KIT.DirectStat\libDirectional'));
+addpath(genpath('E:\Repository\Experiments\Lei.Zhang\SE3Bingham\lib'));
 %% Parameters
 
 % group 1
