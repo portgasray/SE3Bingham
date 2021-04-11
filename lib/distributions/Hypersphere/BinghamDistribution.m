@@ -19,8 +19,8 @@ classdef BinghamDistribution < AbstractHypersphericalDistribution
     end
     
     properties (Constant)
-%         S2 = AbstractHypersphericalDistribution.computeUnitSphereSurface(2) % Circle length
-        S = AbstractHypersphericalDistribution.computeUnitSphereSurface(4) % Circle length
+        S2 = AbstractHypersphericalDistribution.computeUnitSphereSurface(2) % Circle length
+%         S = AbstractHypersphericalDistribution.computeUnitSphereSurface(4) % Circle length
     end
     
     methods
