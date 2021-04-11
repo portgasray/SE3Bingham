@@ -7,10 +7,10 @@ addpath(genpath('E:\Repository\Experiments\Lei.Zhang\SE3Bingham\lib'));
 addpath('E:\Repository\Experiments\Lei.Zhang\SE3Bingham\utils\export_fig');
 
 fontSize = 14;
-markerSize = 10;
+markerSize = 30;
 lineWidth = 5;
 
-rotateFirst = true; %true %false
+rotateFirst = false; %true %false
 %% Parameters for the Bingham-Gaussian Distribution
 % group 1
 C1 = -diag([2 2 2 2]);
@@ -120,27 +120,31 @@ sym_t = [sym_t1; sym_t2; sym_t3];
 %     end
 % end
 
-%% when rotaion first; use cell to store the Rotation Matrices
-Rotation = cell(size(s,2), 1);
-if rotateFirst
-    for i=1:size(s,2)
-        Rotation{i} = angvec2r(theta(i), v(i,:));
-        t(:,i) = Rotation{i}*t(:,i);
-    end
-end
+% %% when rotaion first; use cell to store the Rotation Matrices
+% Rotation = cell(size(s,2), 1);
+% rotateFirst = true; %true %false
+% if rotateFirst
+%     for i=1:size(s,2)
+%         Rotation{i} = angvec2r(theta(i), v(i,:));
+%         t(:,i) = Rotation{i}*t(:,i);
+%     end
+% end
 
 %% plot samples
-clf
-hold on
+
 % samples generated from s(1:8, :)
 % plot the rotational arbitrary vector
-quiver3(t1, t2, t3, v1, v2, v3, 'b', 'AutoScaleFactor', 0.3);
+
 % plot the postion by dots
-scatter3(t1, t2, t3, markerSize, 'ob', 'fill');
+offset = 0;
+figure(1);
+scatter3(t1, t2, t3, markerSize-20, 'ob', 'fill');
+hold on
+quiver3(t1, t2, t3, v1, v2, v3, 'b', 'AutoScaleFactor', 0.3);
 
-
-quiver3(sym_t1, sym_t2, sym_t3, sym_v1, sym_v2, sym_v3, 'r', 'AutoScaleFactor', 0.3);
-scatter3(sym_t1, sym_t2, sym_t3, markerSize, 'or', 'fill');
+hold on
+scatter3(t1+offset, t2+offset, t3+offset, markerSize, 'or'); %, 'fill'
+quiver3(t1+offset, t2+offset, t3+offset, sym_v1, sym_v2, sym_v3, 'r', 'AutoScaleFactor', 0.5);
 
 %% plot modes
 
@@ -192,13 +196,50 @@ axis vis3d; axis equal;
 xlabel('x'); ylabel('y'); zlabel('z');
 grid on; grid minor;
 box on;
-% view(3);
-set(findall(gcf,'type','text'),'FontSize',fontSize);
 
 
-filename = sprintf('se3-bingham-plot3-raw.pdf');
+%% second plot for rotated from the same samples
+% when rotaion first; use cell to store the Rotation Matrices
+Rotation = cell(size(s,2), 1);
+rotateFirst = true; %true %false
 if rotateFirst
-    filename = sprintf('se3-bingham-plot3-rotated.pdf');
+    for i=1:size(s,2)
+        Rotation{i} = angvec2r(theta(i), v(i,:));
+        t(:,i) = Rotation{i}*t(:,i);
+    end
+end
+
+offset = 0;
+figure(2);
+scatter3(t(1,:), t(2,:), t(3,:), markerSize-20, 'ob', 'fill');
+hold on
+scatter3(t1+offset, t2+offset, t3+offset, markerSize, 'or'); %, 'fill'
+
+% quiver3(t(1,:), t(2,:), t(3,:), v1, v2, v3, 'b', 'AutoScaleFactor', 0.3);
+% 
+% hold on
+% 
+% quiver3(t1+offset, t2+offset, t3+offset, sym_v1, sym_v2, sym_v3, 'r', 'AutoScaleFactor', 0.5);
+
+hold off
+%% configuration for plot
+set(gca, 'FontSize', fontSize);
+axis vis3d; axis equal;
+
+% axes.SortMethod='ChildOrder';
+xlabel('x'); ylabel('y'); zlabel('z');
+grid on; grid minor;
+box on;
+
+% az = -47;
+% el = 9;
+% view(az, el);
+
+% set(findall(gcf,'type','text'),'FontSize',fontSize);
+
+filename = sprintf('se3bingham-pose.pdf');
+if rotateFirst
+    filename = sprintf('se3bingham-pose-transformed.pdf');
 end
 
 %% export figure
