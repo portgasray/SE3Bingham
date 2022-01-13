@@ -4,10 +4,9 @@ addpath(genpath('E:\Workspace\MATLAB\bingham'));
 addpath('E:\Repository\Experiments\Lei.Zhang\data');
 addpath(genpath('E:\Workspace\MATLAB\riss_bingham\'));
 
-addpath('E:\Repository\Experiments\Lei.Zhang\utils\export_fig');
-% addpath('E:\Repository\Experiments\Lei.Zhang\utils\tight_subplot');
-addpath('E:\Repository\Experiments\Lei.Zhang\utils\panel-2.14');
+addpath('E:\Repository\Experiments\Lei.Zhang\SE3Bingham\utils\export_fig\');
 
+exportFig = true;
 
 
 %%first input
@@ -71,6 +70,8 @@ for i=1:n
       q2 = [SX(i,j) 0 SY(i,j) SZ(i,j)];
       q3 = [SX(i,j) SY(i,j) 0 SZ(i,j)];
       q4 = [SX(i,j) SY(i,j) SZ(i,j) 0];
+%       To compute the PDF of a unit vector x under a Bingham B, use `f = bingham_pdf(x,B);`
+% Here, I computer 4 
       C1(i,j) = bingham_pdf_3d(q1, Z(1), Z(2), Z(3), V(:,1), V(:,2), V(:,3), F);
       C2(i,j) = bingham_pdf_3d(q2, Z(1), Z(2), Z(3), V(:,1), V(:,2), V(:,3), F);
       C3(i,j) = bingham_pdf_3d(q3, Z(1), Z(2), Z(3), V(:,1), V(:,2), V(:,3), F);
@@ -143,7 +144,9 @@ for i=1:4
 %     p.pack('h', {95 []});
 % %     
 %     h_axis = p(1).select();
-    s = surf(SX, SY, SZ, M{i}, 'EdgeColor', 'none', 'FaceAlpha', .3);
+%     s = surf(SX, SY, SZ, M{i}, 'EdgeColor', 'none', 'FaceAlpha', .5); 
+    s = surf(SX, SY, SZ, M{i}, 'EdgeColor', 'none', 'FaceAlpha', .7); 
+    %'interp'
 %     
 %     % sometimes you'll want to use some other function than
 %     % Panel to create one or more axes. for instance,
@@ -151,8 +154,10 @@ for i=1:4
 %     h_colorbar_axis = colorbar('peer', h_axis);
 %     p(2).select(h_colorbar_axis);
 %     axis([0 100 -3 3]);
-    colorbar;
-    colormap(.5*cool+.5);
+
+%     colorbar;
+%     colormap(.5*cool+.5);
+    
 %     s.EdgeColor='flat' %interp
 %     s.FaceColor = 'interp';
 %     s.LineStyle='none';
@@ -170,7 +175,9 @@ for i=1:4
 %     end
     % configuration for plot
     set(gca, 'FontSize', fontSize);
-    axis vis3d; axis equal;
+    axis vis3d; 
+    axis equal;
+%     axis off;
     xlabel('x');ylabel('y');zlabel('z');
     grid on; 
     grid minor;
@@ -179,8 +186,11 @@ for i=1:4
     set(findall(gcf,'type','text'),'FontSize',fontSize);
     filename = ['projected_bingham_' num2str(i) '.pdf'];
    
+    if exportFig;
+        export_fig(gcf, filename, '-transparent');
+    end
     
-    export_fig(gcf, filename, '-transparent');
+%     export_fig filename -transparent -painters
 end
 
 % set(gcf,'units','normalized','outerposition',[0 0 1 1]);

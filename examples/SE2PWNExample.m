@@ -59,7 +59,6 @@ if rotateFirst
         s(2:3, i) = R*s(2:3, i) + [1; 0];
     end
 end
-
 %% plot samples
 figure(1)
 quiver(s(2,:),s(3,:),cos(s(1,:)),sin(s(1,:)));
