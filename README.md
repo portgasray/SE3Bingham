@@ -3,6 +3,8 @@ This work is for my first publication of Distribution over 6DoF Pose
 
 A Novel Distribution for Representation of 6D Pose Uncertainty
 
+![](https://www.mdpi.com/micromachines/micromachines-13-00126/article_deploy/html/images/micromachines-13-00126-g001-550.jpg)
+
 ```
 @article{zhang2022novel,
   title={A Novel Distribution for Representation of 6D Pose Uncertainty},
